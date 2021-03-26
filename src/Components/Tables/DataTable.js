@@ -1,18 +1,20 @@
 import React, { Component } from 'react'
 import { Table, Button } from 'reactstrap';
+import {baseUrl} from '../../baseUrl'
+
 
 class DataTable extends Component {
 
   deleteItem = id => {
     let confirmDelete = window.confirm('Delete item forever?')
     if(confirmDelete){
-      fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+      fetch(`${baseUrl}requests/${id}/`, {
       method: 'delete',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        id
+        Request_id:id
       })
     })
       .then(response => response.json())
@@ -25,20 +27,20 @@ class DataTable extends Component {
   }
 
   updateItem = id => {
-    fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+    fetch(`${baseUrl}requests/${id}/`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        completed: 'approved',
+        status: 'approved',
       })
     })
       .then(response => response.json())
       .then(item => {
           this.props.updateState(item)
       })
-      .catch(err => alert(err))
+      .catch(err => console.log(err))
 
   }
 
@@ -47,20 +49,21 @@ class DataTable extends Component {
 
     const items = this.props.items.map(item => {
       return (
-        <tr key={item.id}>
-          <th scope="row">{item.id}</th>
-          <td>{item.title}</td>
-          <td>{item.userId}</td>
-          <td>{item.completed}</td>
+        <tr key={item.Request_id}>
+          <th scope="row">{item.Request_id}</th>
+          <td>{item.passenger}</td>
+          <td>{item.pickup_location}</td>
+          <td>{item.Destination}</td>
+          <td>{item.status}</td>
           <td>
             <div style={{width:"110px"}}>
               {' '}
               <Button
                   color="warning"
-                  onClick={() => this.updateItem(item.id)}
+                  onClick={() => this.updateItem(item.Request_id)}
                   style={{float: "left", marginRight:"10px"}}>Approve
                 </Button>
-              <Button color="danger" onClick={() => this.deleteItem(item.id)}>Del</Button>
+              <Button color="danger" onClick={() => this.deleteItem(item.Request_id)}>Del</Button>
             </div>
           </td>
         </tr>
@@ -71,10 +74,11 @@ class DataTable extends Component {
       <Table responsive hover>
         <thead>
           <tr>
-            <th>Userid</th>
-            <th>Title</th>
-            <th>id</th>
-            <th>completed</th>
+            <th>Request_id</th>
+            <th>passenger</th>
+            <th>pickup_location</th>
+            <th>Destination</th>
+            <th>status</th>
             
           </tr>
         </thead>
