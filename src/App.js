@@ -3,24 +3,31 @@ import React, { Component } from 'react'
 import { Container, Row, Col } from 'reactstrap'
 import DataTable from './Components/Tables/DataTable'
 import { CSVLink } from "react-csv"
+import {baseUrl} from './baseUrl'
 
 class App extends Component {
   state = {
-    items: [{
-      "userId": 1,
-      "id": 1,
-      "title": "delectus aut autem",
-      "completed": "false"
-      },{
-        "userId": 2,
-        "id": 2,
-        "title": "second",
-        "completed": "true"
-        }]
+    items: [ {
+      "url": "http://127.0.0.1:8000/requests/4/",
+      "Request_id": 4,
+      "Car": "http://127.0.0.1:8000/Car/1/",
+      "passenger": "masikotimo@gmail.com",
+      "pickup_location": "Kawanda",
+      "Destination": "Police",
+      "status": "pending"
+  },{
+    "url": "http://127.0.0.1:8000/requests/1/",
+    "Request_id": 1,
+    "Car": "http://127.0.0.1:8000/Car/1/",
+    "passenger": "masikotimo@gmail.com",
+    "pickup_location": "kawempe",
+    "Destination": "gulu",
+    "status": "pending"
+},]
   }
 
   getItems(){
-    fetch('https://jsonplaceholder.typicode.com/todos/')
+    fetch(`${baseUrl}requests/`)
       .then(response => response.json())
       .then(items => this.setState({items}))
       .catch(err => console.log(err))
@@ -34,7 +41,7 @@ class App extends Component {
 
   updateState = (item) => {
     alert(JSON.stringify(item))
-    const itemIndex = this.state.items.findIndex(data => data.id === item.id)
+    const itemIndex = this.state.items.findIndex(data => data.Request_id === item.Request_id)
 
     const newArray = [
       ...this.state.items.slice(0, itemIndex),
@@ -46,7 +53,7 @@ class App extends Component {
   }
 
   deleteItemFromState = (id) => {
-    const updatedItems = this.state.items.filter(item => item.id !== id)
+    const updatedItems = this.state.items.filter(item => item.Request_id !== id)
     this.setState({ items: updatedItems })
   }
 
