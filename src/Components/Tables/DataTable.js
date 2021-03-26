@@ -26,7 +26,8 @@ class DataTable extends Component {
 
   }
 
-  updateItem = id => {
+  approveItem = id => {
+    
     fetch(`${baseUrl}requests/${id}/`, {
       method: 'PATCH',
       headers: {
@@ -44,6 +45,24 @@ class DataTable extends Component {
 
   }
 
+  declineItem = id => {
+    
+    fetch(`${baseUrl}requests/${id}/`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        status: 'declined',
+      })
+    })
+      .then(response => response.json())
+      .then(item => {
+          this.props.updateState(item)
+      })
+      .catch(err => console.log(err))
+
+  }
  
   render() {
 
@@ -60,10 +79,15 @@ class DataTable extends Component {
               {' '}
               <Button
                   color="warning"
-                  onClick={() => this.updateItem(item.Request_id)}
+                  onClick={() => this.approveItem(item.Request_id)}
                   style={{float: "left", marginRight:"10px"}}>Approve
                 </Button>
-              <Button color="danger" onClick={() => this.deleteItem(item.Request_id)}>Del</Button>
+                <Button color="danger" style={{ marginRight:"10px"}} onClick={() => this.deleteItem(item.Request_id)}>Del</Button>
+                <Button
+                  color="warning"
+                  onClick={() => this.declineItem(item.Request_id)}
+                  style={{ marginRight:"10px"}}>Decline
+                </Button>
             </div>
           </td>
         </tr>
