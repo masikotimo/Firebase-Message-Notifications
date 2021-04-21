@@ -2,8 +2,33 @@ import React, { Component } from 'react'
 import { Table, Button } from 'reactstrap';
 import {baseUrl} from '../../baseUrl'
 
-
 class DataTable extends Component {
+
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+      response: '',
+      post: 'gweee',
+      responseToPost: '',
+    }
+  }
+
+  notify(token){
+    fetch(`/api/world`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ExpoToken: token
+      })
+    })
+      .then(response => response.text())
+     
+      .catch(err => console.log(err))
+  }
+  
 
   deleteItem = id => {
     let confirmDelete = window.confirm('Delete item forever?')
@@ -26,7 +51,7 @@ class DataTable extends Component {
 
   }
 
-  approveItem = id => {
+  approveItem = (id,ExpoToken) => {
     
     fetch(`${baseUrl}requests/${id}/`, {
       method: 'PATCH',
@@ -40,6 +65,9 @@ class DataTable extends Component {
       .then(response => response.json())
       .then(item => {
           this.props.updateState(item)
+
+          this.notify(ExpoToken)
+
       })
       .catch(err => console.log(err))
 
@@ -79,7 +107,7 @@ class DataTable extends Component {
               {' '}
               <Button
                   color="warning"
-                  onClick={() => this.approveItem(item.Request_id)}
+                  onClick={() => this.approveItem(item.Request_id,item.notificationToken)}
                   style={{float: "left", marginRight:"10px"}}>Approve
                 </Button>
                 <Button color="danger" style={{ marginRight:"10px"}} onClick={() => this.deleteItem(item.Request_id)}>Del</Button>

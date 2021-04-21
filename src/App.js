@@ -40,7 +40,6 @@ class App extends Component {
   }
 
   updateState = (item) => {
-    alert(JSON.stringify(item))
     const itemIndex = this.state.items.findIndex(data => data.Request_id === item.Request_id)
 
     const newArray = [
