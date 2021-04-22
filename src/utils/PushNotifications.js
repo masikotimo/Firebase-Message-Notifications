@@ -1,20 +1,32 @@
 const { Expo } = require('expo-server-sdk');
 
-const sendNotifications = (pushToken) => {
-    // alert(pushToken)
+const sendNotifications = (passengerPushToken,driverPushToken) => {
+    // alert(passengerPushToken)
     let expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
     let messages = [];
 
-    if (!Expo.isExpoPushToken(pushToken)) {
-        console.error(`Push token ${pushToken} is not a valid Expo push token`);
+    if (!Expo.isExpoPushToken(passengerPushToken)) {
+        console.error(`Push token ${passengerPushToken} is not a valid Expo push token`);
+        return false
+    }
+    if (!Expo.isExpoPushToken(driverPushToken)) {
+        console.error(`Push token ${driverPushToken} is not a valid Expo push token`);
         return false
     }
 
     messages.push({
-        to: pushToken,
+        to: passengerPushToken,
         sound: 'default',
         title: "Request Approval",
         body: 'Hello Masiko, your request has been approved ',
+        data: { withSome: 'data' },
+    })
+
+    messages.push({
+        to: driverPushToken,
+        sound: 'default',
+        title: "New Trip",
+        body: 'Hello Driver, a new Trip has been assigned to you ',
         data: { withSome: 'data' },
     })
 
@@ -33,7 +45,7 @@ const sendNotifications = (pushToken) => {
         }
     })();
 
-    // alert(pushToken)
+    // alert(passengerPushToken)
 }
 
 
