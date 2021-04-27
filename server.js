@@ -16,7 +16,7 @@ app.get('/api/hello', (req, res) => {
 
 app.post('/api/world', (req, res) => {
   console.log(req.body);
-  sendNotifications(req.body.ExpoToken)
+  sendNotifications(req.body.ExpoToken,req.body.driverToken)
   res.send(
     `Notification sent`,
   );

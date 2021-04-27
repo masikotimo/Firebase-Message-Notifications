@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { Table, Button } from 'reactstrap';
 import {baseUrl} from '../../baseUrl'
+import Dropdown from './Dropdown'
+import { connect } from 'react-redux';
+
 
 class DataTable extends Component {
 
@@ -21,7 +24,8 @@ class DataTable extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        ExpoToken: token
+        ExpoToken: token,
+        driverToken:this.props.driverToken
       })
     })
       .then(response => response.text())
@@ -91,7 +95,12 @@ class DataTable extends Component {
       .catch(err => console.log(err))
 
   }
- 
+
+  componentDidMount(){
+   
+  }
+
+  
   render() {
 
     const items = this.props.items.map(item => {
@@ -102,6 +111,7 @@ class DataTable extends Component {
           <td>{item.pickup_location}</td>
           <td>{item.Destination}</td>
           <td>{item.status}</td>
+          <td><Dropdown/></td>
           <td>
             <div style={{width:"110px"}}>
               {' '}
@@ -119,6 +129,7 @@ class DataTable extends Component {
             </div>
           </td>
         </tr>
+
         )
       })
 
@@ -131,6 +142,8 @@ class DataTable extends Component {
             <th>pickup_location</th>
             <th>Destination</th>
             <th>status</th>
+            <th>Select Driver</th>
+            <th>Action</th>
             
           </tr>
         </thead>
@@ -142,4 +155,19 @@ class DataTable extends Component {
   }
 }
 
-export default DataTable
+
+
+function mapStateToProps(state) {
+  return {
+    driverToken: state.driverToken,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setDriverToken: (token) =>
+      dispatch({ type: 'SET_DRIVER_TOKEN', driverToken: token }),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)( DataTable);
