@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getToken } from "../../firebaseInit.js";
+import { grabToken } from "../../FirebaseInit.js";
 
 const Notifications = (props) => {
   const [isTokenFound, setTokenFound] = useState(false);
@@ -11,7 +11,7 @@ const Notifications = (props) => {
     let data;
 
     async function tokenFunc() {
-      data = await getToken(setTokenFound);
+      data = await grabToken(setTokenFound);
       if (data) {
         console.log("Token is", data);
       }

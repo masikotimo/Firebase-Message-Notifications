@@ -1,10 +1,10 @@
 import "./App.css";
-import Fader from "./components/Fader";
+import Fader from "./Components/Fader";
 
 import React, { useState } from "react";
 import { onMessageListener } from "../src/FirebaseInit";
-import Notifications from "./components/Notifications/Notifications";
-import ReactNotificationComponent from "./components/Notifications/ReactNotification";
+import Notifications from "./Components/Notifications/Notifications";
+import ReactNotificationComponent from "./Components/Notifications/ReactNotification";
 
 function App() {
   const [show, setShow] = useState(false);

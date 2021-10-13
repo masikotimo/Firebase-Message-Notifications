@@ -1,7 +1,6 @@
-// import * as firebase from 'firebase/app';
-import   'firebase/messaging';
-import { initializeApp } from 'firebase/app';
-import { getMessaging } from "firebase/messaging/sw";
+import * as firebase from 'firebase/app';
+import 'firebase/messaging';
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDh3IpeBnyAC8gI-NnuCr2Ro6W6WdX8Cy0",
@@ -13,21 +12,34 @@ const firebaseConfig = {
   measurementId: "G-4NN64SERND"
 };
 
-const firebase = initializeApp(firebaseConfig);
-const messaging = getMessaging(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
+const messaging = getMessaging();
 
 // const { REACT_APP_VAPID_KEY } = process.env
 // const publicKey = REACT_APP_VAPID_KEY;
 
 const publicKey = 'BMjqzvXjNgfgWAgwfTWn14sDSXjvIHxL0V39iquGX1n6GbU_cnrlOKmAihKN1nv8dXNXfv0AJAU7TbVwA3d9fsE';
 
-export const getToken = async (setTokenFound) => {
+// Service Worker explicit registration to explicitly define sw location at a pat
+// const swRegistration = async () => {
+//   try {
+//     await navigator.serviceWorker.register('../firebase-messaging-sw.js');
+//   } catch (error) {
+//     console.error('error');
+//   }
+// }
+export const grabToken = async (setTokenFound) => {
+
   let currentToken = '';
   try {
-    currentToken = await messaging.getToken({vapidKey: publicKey});
+
+
+    currentToken = await getToken({ vapidKey: publicKey, });
     if (currentToken) {
+
       setTokenFound(true);
     } else {
+
       setTokenFound(false);
     }
   } catch (error) {
@@ -38,7 +50,7 @@ export const getToken = async (setTokenFound) => {
 
 export const onMessageListener = () =>
   new Promise((resolve) => {
-    messaging.onMessage((payload) => {
+    onMessage(messaging, (payload) => {
       resolve(payload);
     });
   });
