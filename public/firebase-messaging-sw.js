@@ -1,8 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-restricted-globals */
-import { getMessaging, } from "firebase/messaging";
-import {  onMessage } from "firebase/messaging";
-import * as firebase from 'firebase/app';
+
+// import * as firebase from 'firebase/app';
 
 // Scripts for firebase and firebase messaging
 importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js');
@@ -22,27 +21,22 @@ const firebaseConfig = {
   firebase.initializeApp(firebaseConfig);
 
 
-const messaging = getMessaging();
+const messaging =  firebase.messaging();
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('../firebase-messaging-sw.js')
-  .then(function(registration) {
-    console.log('Registration successful, scope is:', registration.scope);
-  }).catch(function(err) {
-    console.log('Service worker registration failed, error:', err);
-  });
-}
 
-onMessage(messaging,function (payload) {
-    console.log("Received background message ", payload);
-  
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-      body: payload.notification.body,
-    };
-  
-    return self.registration.showNotification(
-      notificationTitle,
-      notificationOptions
-    );
-  });
+
+messaging.onBackgroundMessage(function (payload) {
+  console.log("Received background message ", payload);
+
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: "/logo192.png",
+  };
+
+  // eslint-disable-next-line no-restricted-globals
+  return self.registration.showNotification(
+    notificationTitle,
+    notificationOptions
+  );
+});

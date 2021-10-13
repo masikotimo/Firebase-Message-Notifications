@@ -1,6 +1,6 @@
-import * as firebase from 'firebase/app';
+import firebase from "firebase/app";
 import 'firebase/messaging';
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDh3IpeBnyAC8gI-NnuCr2Ro6W6WdX8Cy0",
@@ -13,7 +13,7 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const messaging = getMessaging();
+const messaging = firebase.messaging()
 
 // const { REACT_APP_VAPID_KEY } = process.env
 // const publicKey = REACT_APP_VAPID_KEY;
@@ -34,7 +34,7 @@ export const grabToken = async (setTokenFound) => {
   try {
 
 
-    currentToken = await getToken({ vapidKey: publicKey, });
+    currentToken = await messaging.getToken({ vapidKey: publicKey, });
     if (currentToken) {
 
       setTokenFound(true);
@@ -49,10 +49,10 @@ export const grabToken = async (setTokenFound) => {
 };
 
 export const onMessageListener = () =>
-  new Promise((resolve) => {
-    onMessage(messaging, (payload) => {
-      resolve(payload);
-    });
+new Promise((resolve) => {
+  messaging.onMessage((payload) => {
+    resolve(payload);
+  });
   });
 
 
