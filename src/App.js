@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { onMessageListener } from "../src/FirebaseInit";
 import Notifications from "./Components/Notifications/Notifications";
 import ReactNotificationComponent from "./Components/Notifications/ReactNotification";
+import Date from "./Components/Date";
 
 function App() {
   const [show, setShow] = useState(false);
@@ -34,6 +35,7 @@ function App() {
         <></>
       )}
       <Notifications />
+      <Date />
       <Fader text="Hello React"></Fader>
     </div>
   );
